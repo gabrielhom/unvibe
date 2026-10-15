@@ -1,0 +1,29 @@
+# unvibe
+
+Agentes não assinam meus commits. Este plugin faz duas coisas:
+
+- `hooks/guard.py` roda antes de todo `git commit`, `git tag`, `gh pr`, `gh issue`, `gh release`, `gh api` e ferramenta MCP do GitHub. Se o texto tiver `Co-Authored-By`, "Generated with ...", 🤖, email noreply de IA ou travessão, a chamada é negada e o agente reescreve.
+- `skills/unvibe/SKILL.md` é a skill (formato Agent Skills) que o agente segue para escrever no estilo do repo e sem cara de IA.
+
+## Instalar no Claude Code
+
+```sh
+claude plugin marketplace add gabrielhom/unvibe
+claude plugin install unvibe@unvibe
+```
+
+Coloque também no `~/.claude/settings.json`, para o Claude Code parar de pedir a atribuição na origem:
+
+```json
+"attribution": { "commit": "", "pr": "" }
+```
+
+Outros agentes (Codex, Cursor, etc.) usam só a skill. Copie `skills/unvibe` para a pasta de skills deles.
+
+## Testar
+
+```sh
+python3 hooks/test_guard.py
+```
+
+`gh pr create --body-file -` (corpo via stdin) não é verificado.

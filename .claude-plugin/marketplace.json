@@ -1,0 +1,9 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "unvibe",
+  "description": "No AI co-authors, no AI slop in git.",
+  "owner": { "name": "Gabriel Mello", "url": "https://github.com/gabrielhom" },
+  "plugins": [
+    { "name": "unvibe", "description": "Blocks AI attribution in commits and PRs and de-slops the text.", "source": "./", "category": "productivity" }
+  ]
+}
