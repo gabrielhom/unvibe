@@ -1,6 +1,6 @@
 {
   "name": "unvibe",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Keeps AI out of your git authorship. Blocks co-author trailers and AI attribution, and de-slops commit and PR text.",
   "author": {
     "name": "Gabriel Mello",
