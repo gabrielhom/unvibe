@@ -2,8 +2,8 @@
 
 Agentes não assinam meus commits. Este plugin faz duas coisas:
 
-- `hooks/guard.py` roda antes de todo `git commit`, `git tag`, `gh pr`, `gh issue`, `gh release`, `gh api` e ferramenta MCP do GitHub. Se o texto tiver `Co-Authored-By`, "Generated with ...", 🤖, email noreply de IA ou travessão, a chamada é negada e o agente reescreve.
-- `skills/unvibe/SKILL.md` é a skill (formato Agent Skills) que o agente segue para escrever no estilo do repo e sem cara de IA.
+- `hooks/guard.py` roda antes de todo `git commit`, `git tag`, `gh pr`, `gh issue`, `gh release`, `gh api`, ferramenta MCP do GitHub e do Claude Docs, publicação de artifact e escrita em arquivo `.md`. Se o texto tiver `Co-Authored-By`, "Generated with ...", 🤖, email noreply de IA ou travessão, a chamada é negada e o agente reescreve.
+- `skills/unvibe/SKILL.md` é a skill (formato Agent Skills) que o agente segue para escrever no estilo do repo e sem cara de IA, em inglês e português.
 
 ## Instalar no Claude Code
 

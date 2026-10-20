@@ -31,4 +31,14 @@ assert bash(f"git commit -F {f.name}") == "deny", "commit message files are scan
 
 assert decision("mcp__github__create_pull_request", {"body": "Co-authored-by: Codex"}) == "deny"
 assert decision("Write", {"content": "Co-authored-by: x"}) == "allow"
+assert decision("Write", {"file_path": "app.py", "content": "s = 'a — b'"}) == "allow", "code files pass"
+assert decision("Write", {"file_path": "README.md", "content": "Rápido — e simples"}) == "deny"
+assert decision("Edit", {"file_path": "docs/relatorio.md", "new_string": "ok &mdash; ok"}) == "deny"
+assert decision("Edit", {"file_path": "README.md", "new_string": "Roda em 2 s."}) == "allow"
+assert decision("mcp__claude_ai_Claude_Docs__batch", {"batch": [{"markdown": "Resumo — fim"}]}) == "deny"
+
+with tempfile.NamedTemporaryFile("w", suffix=".html", delete=False) as f:
+    f.write("<p>Relatório &mdash; outubro</p>")
+assert decision("Artifact", {"file_path": f.name}) == "deny", "artifact pages are scanned"
+assert decision("Artifact", {"action": "list"}) == "allow"
 print("ok")

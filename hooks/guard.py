@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""PreToolUse guard: blocks git/GitHub publishing that carries AI attribution or obvious AI tells."""
+"""PreToolUse guard: blocks git/GitHub publishing, artifacts, docs and .md files that carry AI attribution or obvious AI tells."""
 import json
 import re
 import sys
@@ -10,11 +10,19 @@ RULES = [
      "Remove the 'Generated with ...' line. No AI attribution."),
     (re.compile(r"🤖"), "Remove the robot emoji."),
     (re.compile(r"noreply@anthropic\.com|noreply@openai\.com", re.I), "Remove the AI author email."),
-    (re.compile(r"—"), "Remove em dashes. Use a period or a comma."),
+    (re.compile(r"—|&mdash;|&#8212;|&#x2014;", re.I), "Remove em dashes. Use a period or a comma."),
 ]
 
 PUBLISH_CMD = re.compile(r"\b(git\s+(commit|tag|notes|merge)|gh\s+(pr|issue|release|api|gist))\b")
 FILE_ARG = re.compile(r"(?:-F|--file|--body-file|--notes-file)[=\s]+(\"[^\"]+\"|'[^']+'|\S+)")
+
+
+def read(path):
+    try:
+        with open(path, encoding="utf-8") as f:
+            return f.read()
+    except (OSError, UnicodeDecodeError):
+        return ""
 
 
 def publish_text(tool_name, tool_input):
@@ -25,15 +33,15 @@ def publish_text(tool_name, tool_input):
         text = cmd
         for path in FILE_ARG.findall(cmd):
             path = path.strip("'\"")
-            if path == "-":
-                continue
-            try:
-                with open(path, encoding="utf-8") as f:
-                    text += "\n" + f.read()
-            except OSError:
-                pass
+            if path != "-":
+                text += "\n" + read(path)
         return text
-    if "github" in tool_name.lower():
+    if tool_name == "Artifact":
+        return read(tool_input.get("file_path", ""))
+    # ponytail: only .md, code files carry em dashes in strings and test data
+    if tool_name in ("Write", "Edit") and tool_input.get("file_path", "").endswith(".md"):
+        return tool_input.get("content") or tool_input.get("new_string") or ""
+    if "github" in tool_name.lower() or "claude_docs" in tool_name.lower():
         return json.dumps(tool_input, ensure_ascii=False)
     return ""
 

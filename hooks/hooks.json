@@ -2,7 +2,7 @@
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Bash|mcp__.*github.*",
+        "matcher": "Bash|Artifact|Write|Edit|mcp__.*github.*|mcp__.*Claude_Docs.*",
         "hooks": [
           {
             "type": "command",
